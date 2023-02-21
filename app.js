@@ -10,7 +10,8 @@ welcomePopup = document.querySelector("#welcome-popup")
 namePopup = document.querySelector("#name-popup"),
 addNameBtn = document.querySelector("#addNameBtn"),
 playerNameInput = document.querySelector("#player-name-input"),
-greetingPlayer = document.querySelector("#greetingPlayer");
+greetingPlayer = document.querySelector("#greetingPlayer"),
+animatedGameHeadingCover = document.querySelector(".animated-game-name-cover");
 
 
 // Event Listeners
@@ -51,6 +52,8 @@ addNameBtn.addEventListener("click", () => {
 
         setTimeout(() => {
             popupCover.classList.add("popup-cover-none");
+            animatedGameHeadingCover.style.display = "flex";
+            animatedGameHeadingCover.children[0].classList.add("animated-game-name-heading");
         }, 500);
 
     } else {
