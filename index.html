@@ -21,7 +21,7 @@
                 <p>00:00</p>
             </div>
             <div class="player-title flex">
-                <p>Stars Of Space</p>
+                <p id="greetingPlayer">Stars Of Space</p>
             </div>
             <div class="levels flex">
                 <p class="flex">5s</p>
@@ -35,10 +35,15 @@
         </div>
     </div>
     <div class="popup-cover flex">
-        <div class="popup flex">
+        <div class="popup flex" id="welcome-popup">
             <h1>Welcome To Space</h1>
             <p>select the time on top right corner to start</p>
             <button id="playBtn">Play</button>
+        </div>
+        <div class="popup popup-hidden flex" id="name-popup">
+            <h1>Enter Your Name</h1>
+            <input type="text" name="player-name" id="player-name-input">
+            <button id="addNameBtn">Confirm</button>
         </div>
     </div>
     <button id="play-mute" class="flex">

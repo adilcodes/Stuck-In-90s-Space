@@ -6,7 +6,11 @@ bgAudio = new Audio('./audios/bgAudio.mp3');
 let playBtn = document.querySelector("#playBtn"),
 playAndMuteBtn = document.querySelector("#play-mute"),
 popupCover = document.querySelector(".popup-cover"),
-popup = document.querySelector(".popup");
+welcomePopup = document.querySelector("#welcome-popup")
+namePopup = document.querySelector("#name-popup"),
+addNameBtn = document.querySelector("#addNameBtn"),
+playerNameInput = document.querySelector("#player-name-input"),
+greetingPlayer = document.querySelector("#greetingPlayer");
 
 
 // Event Listeners
@@ -14,13 +18,9 @@ playBtn.addEventListener("click", () => {
     btnClickAudio.currentTime = 0;
     btnClickAudio.play();
 
-    // Making Popup Hidden
-    popupCover.classList.add("popup-cover-hidden");
-    popup.classList.add("popup-hidden");
-
-    setTimeout(() => {
-        popupCover.classList.add("popup-cover-none");
-    }, 500);
+    // Making Welcome Popup Hidden and Showing Name Popup
+    welcomePopup.classList.add("popup-hidden");
+    namePopup.classList.remove("popup-hidden");
 
     setTimeout(() => {
         bgAudio.volume = 0.6;
@@ -38,6 +38,22 @@ playAndMuteBtn.addEventListener("click", () => {
     } else {
         playAndMuteBtnIcon.classList.add("bi-volume-up-fill");
         playAndMuteBtnIcon.classList.remove("bi-volume-mute-fill");
-        bgAudio.volume = 1;
+        bgAudio.volume = 0.6;
+    }
+});
+
+addNameBtn.addEventListener("click", () => {
+    if(playerNameInput.value !== ""){
+        btnClickAudio.play();
+        greetingPlayer.innerText = `Greetings Captain ${playerNameInput.value}`;
+        namePopup.classList.add("popup-hidden");
+        popupCover.classList.add("popup-cover-hidden");
+
+        setTimeout(() => {
+            popupCover.classList.add("popup-cover-none");
+        }, 500);
+
+    } else {
+        playerNameInput.style.borderColor = "red";
     }
 });

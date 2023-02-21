@@ -103,6 +103,16 @@ body{
 .popup button:active{
     transform: scale(0.97);
 }
+.popup input{
+    width: 204px;
+    border: 2px solid #000;
+    height: 36px;
+    padding: 0 5px;
+    font-size: 24px;
+    text-align: center;
+    outline: none;
+    transition: 0.1s ease-in-out;
+}
 
 /* Hiding pop-up on play button click */
 .popup-cover-hidden{
