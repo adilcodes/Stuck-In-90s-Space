@@ -11,7 +11,8 @@ namePopup = document.querySelector("#name-popup"),
 addNameBtn = document.querySelector("#addNameBtn"),
 playerNameInput = document.querySelector("#player-name-input"),
 greetingPlayer = document.querySelector("#greetingPlayer"),
-animatedGameHeadingCover = document.querySelector(".animated-game-name-cover");
+animatedGameHeadingCover = document.querySelector(".animated-game-name-cover"),
+levels = document.querySelectorAll(".levels button");
 
 
 // Event Listeners
@@ -61,4 +62,21 @@ addNameBtn.addEventListener("click", () => {
     } else {
         playerNameInput.style.borderColor = "red";
     }
+});
+
+levels.forEach(levelBtn => {
+    levelBtn.addEventListener("click", () => {
+        let previousSelectedLvl = document.querySelector(".selectedlvl");
+        previousSelectedLvl ? previousSelectedLvl.classList.remove("selectedlvl") : "";
+        levelBtn.classList.add("selectedlvl");
+        let disabledLevels = document.querySelectorAll(".levels button:not(.selectedlvl)");
+        disabledLevels.forEach(disabledLevel => {
+            disabledLevel.setAttribute("disabled", "disabled");
+        });
+        animatedGameHeadingCover.style.display = "none";
+        let currentSelectedlevel = document.querySelector(".selectedlvl").innerText;
+        let currentSelectedlevelTime = +(currentSelectedlevel.split("").splice(0, currentSelectedlevel.length - 1).join(""));
+
+
+    });
 });
