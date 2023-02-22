@@ -58,7 +58,9 @@ body{
     margin: 0 5px;
     cursor: pointer;
 }
-
+.levels .selected{
+    
+}
 /* Game Space Styles */
 .container .game-space{
     width: 100%;
@@ -147,7 +149,7 @@ body{
     transform: scale(0.97);
 }
 
-/* Animated Game Name Styles */
+/* Animated Game Name and Guideline Styles */
 .animated-game-name-cover{
     position: absolute;
     top: 0;
@@ -166,9 +168,18 @@ body{
 .animated-game-name-cover .animated-game-name-heading{
     animation: gameNameAnimation 1.3s linear 1 forwards;
 }
+.animated-game-name-cover p{
+    color: red;
+    opacity: 0;
+    font-size: 17px;
+    position: relative;
+    top: 53px;
+}
+.animated-game-name-cover .animated-game-guideline{
+    animation: gameGuidelineAnimation 1.5s linear 1.8s infinite;
+}
 
-
-/* Making Animation for Game Name Enterance*/
+/* Making Animation for Game Name and guideline Enterance*/
 @keyframes gameNameAnimation {
     from {
         font-size: 0;
@@ -177,5 +188,13 @@ body{
     to {
         font-size: 110px;
         transform: scale(1.4) rotate(360deg);
+    }
+}
+@keyframes gameGuidelineAnimation {
+    0%,100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
     }
 }

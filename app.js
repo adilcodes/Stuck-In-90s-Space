@@ -53,7 +53,9 @@ addNameBtn.addEventListener("click", () => {
         setTimeout(() => {
             popupCover.classList.add("popup-cover-none");
             animatedGameHeadingCover.style.display = "flex";
+            animatedGameHeadingCover.style.flexDirection = "column";
             animatedGameHeadingCover.children[0].classList.add("animated-game-name-heading");
+            animatedGameHeadingCover.children[1].classList.add("animated-game-guideline");
         }, 500);
 
     } else {
