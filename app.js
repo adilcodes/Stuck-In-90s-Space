@@ -12,7 +12,9 @@ addNameBtn = document.querySelector("#addNameBtn"),
 playerNameInput = document.querySelector("#player-name-input"),
 greetingPlayer = document.querySelector("#greetingPlayer"),
 animatedGameHeadingCover = document.querySelector(".animated-game-name-cover"),
-levels = document.querySelectorAll(".levels button");
+levels = document.querySelectorAll(".levels button"),
+timer = document.querySelector("#timer-countdown"),
+startCountdown = document.querySelector(".start-countdown p");
 
 
 // Event Listeners
@@ -76,7 +78,22 @@ levels.forEach(levelBtn => {
         animatedGameHeadingCover.style.display = "none";
         let currentSelectedlevel = document.querySelector(".selectedlvl").innerText;
         let currentSelectedlevelTime = +(currentSelectedlevel.split("").splice(0, currentSelectedlevel.length - 1).join(""));
+        if(currentSelectedlevelTime <= 9){
+            timer.innerText = "00:0" + currentSelectedlevelTime;
+        } else {
+            timer.innerText = "00:" + currentSelectedlevelTime;
+        };
 
+        startCountdown.parentElement.style.display = "flex";
+        let startCountdownextreme = 3;
+        let countdownInterval =  setInterval(() => {
+            if(startCountdownextreme > 0){
+                startCountdownextreme--;
+                startCountdown.innerText = startCountdownextreme;
+            } else {
+                clearInterval(countdownInterval);
+            }
+        },1000);
 
     });
 });
