@@ -14,7 +14,8 @@ let playBtn = document.querySelector("#playBtn"),
     animatedGameHeadingCover = document.querySelector(".animated-game-name-cover"),
     levels = document.querySelectorAll(".levels button"),
     timer = document.querySelector("#timer-countdown"),
-    startCountdown = document.querySelector(".start-countdown p");
+    startCountdown = document.querySelector(".start-countdown p"),
+    gameRestartBtn = document.querySelector(".gameRestartBtn");
 
 // Global Variables
 let disabledLevels;
@@ -114,4 +115,8 @@ levels.forEach(levelBtn => {
         }, 1000);
 
     });
+});
+
+gameRestartBtn.addEventListener("click", () => {
+    console.log("Hello");
 });
