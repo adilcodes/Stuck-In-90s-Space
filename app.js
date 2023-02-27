@@ -15,10 +15,12 @@ let playBtn = document.querySelector("#playBtn"),
     levels = document.querySelectorAll(".levels button"),
     timer = document.querySelector("#timer-countdown"),
     startCountdown = document.querySelector(".start-countdown p"),
-    gameRestartBtn = document.querySelector(".gameRestartBtn");
+    gameRestartBtn = document.querySelector(".gameRestartBtn"),
+    canvas = document.querySelector("canvas");
 
 // Global Variables
 let disabledLevels;
+let ctx = canvas.getContext("2d");
 
 // Event Listeners
 playBtn.addEventListener("click", () => {
