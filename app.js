@@ -132,8 +132,8 @@ const planetImage = document.querySelector("#planetImage")
 const planet = {
     width: 60,
     height: 60,
-    x: 50,
-    y: 50,
+    x: 595,
+    y: 225,
     speed: 5,
     dx: 0,
     dy: 0,
@@ -142,8 +142,27 @@ const planet = {
 function drawPlanet(){
     ctx.drawImage(planetImage, planet.x, planet.y, planet.width, planet.height);
 }
+
+function newPosition(){
+    planet.x += planet.dx;
+    planet.y += planet.dy;
+}
+
 function update(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawPlanet();
+    newPosition();
+
+    requestAnimationFrame(update)
 }
 
 update();
+
+// Canvas Event Listeners
+document.addEventListener("keydown", (e) => {
+    if(e.key === "ArrowUp"){
+        planet.dy = -planet.speed;
+    } else if(e.key === "ArrowDown"){
+        planet.dy = planet.speed;
+    }
+});
