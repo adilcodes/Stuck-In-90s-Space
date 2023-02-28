@@ -268,3 +268,10 @@ body{
 .game-end-popup div button:active{
     transform: scale(0.97);
 }
+
+/* Planet Image */
+#planetImage{
+    position: absolute;
+    top: 0;
+    display: none;
+}

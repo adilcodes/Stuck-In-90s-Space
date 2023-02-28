@@ -21,6 +21,8 @@ let playBtn = document.querySelector("#playBtn"),
 // Global Variables
 let disabledLevels;
 let ctx = canvas.getContext("2d");
+canvas.width = canvas.offsetWidth;
+canvas.height = canvas.offsetHeight;
 
 // Event Listeners
 playBtn.addEventListener("click", () => {
@@ -122,3 +124,26 @@ levels.forEach(levelBtn => {
 gameRestartBtn.addEventListener("click", () => {
     console.log("Hello");
 });
+
+// Canvas Working
+// Adding Planet image to canvas
+const planetImage = document.querySelector("#planetImage")
+
+const planet = {
+    width: 60,
+    height: 60,
+    x: 50,
+    y: 50,
+    speed: 5,
+    dx: 0,
+    dy: 0,
+};
+
+function drawPlanet(){
+    ctx.drawImage(planetImage, planet.x, planet.y, planet.width, planet.height);
+}
+function update(){
+    drawPlanet();
+}
+
+update();
