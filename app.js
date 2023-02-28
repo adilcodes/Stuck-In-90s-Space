@@ -15,12 +15,19 @@ let playBtn = document.querySelector("#playBtn"),
     levels = document.querySelectorAll(".levels button"),
     timer = document.querySelector("#timer-countdown"),
     startCountdown = document.querySelector(".start-countdown p"),
-    gameRestartBtn = document.querySelector(".gameRestartBtn"),
-    canvas = document.querySelector("canvas");
+    gameRestartBtn = document.querySelectorAll(".gameRestartBtn"),
+    canvas = document.querySelector("canvas"),
+    gameEndPopUp = document.querySelector(".game-end-popup"),
+    gameLossDiv = document.querySelector(".game-loss"),
+    gameWonDiv = document.querySelector(".game-win");
 
 // Global Variables
-let disabledLevels;
-let ctx = canvas.getContext("2d");
+let disabledLevels,
+    timerInterval,
+    animationFrame,
+    currentSelectedlevel,
+    currentSelectedlevelTime,
+    ctx = canvas.getContext("2d");
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 
@@ -83,8 +90,8 @@ levels.forEach(levelBtn => {
             disabledLevel.setAttribute("disabled", "disabled");
         });
         animatedGameHeadingCover.style.display = "none";
-        let currentSelectedlevel = document.querySelector(".selectedlvl").innerText;
-        let currentSelectedlevelTime = +(currentSelectedlevel.split("").splice(0, currentSelectedlevel.length - 1).join(""));
+        currentSelectedlevel = document.querySelector(".selectedlvl").innerText;
+        currentSelectedlevelTime = +(currentSelectedlevel.split("").splice(0, currentSelectedlevel.length - 1).join(""));
         if (currentSelectedlevelTime <= 9) {
             timer.innerText = "00:0" + currentSelectedlevelTime;
         } else {
@@ -100,8 +107,9 @@ levels.forEach(levelBtn => {
                 startCountdown.innerText = startCountdownextreme;
             } else {
                 startCountdown.parentElement.style.display = "none";
+                canvas.style.opacity = 1;
                 clearInterval(countdownInterval);
-                let timerInterval = setInterval(() => {
+                timerInterval = setInterval(() => {
                     currentSelectedlevelTime--;
                     if (currentSelectedlevelTime >= 10) {
                         timer.innerText = "00:" + currentSelectedlevelTime;
@@ -113,6 +121,8 @@ levels.forEach(levelBtn => {
                             disabledLevel.removeAttribute("disabled");
                         });
                         document.querySelector(".selectedlvl").classList.remove("selectedlvl");
+                        gameEndPopUp.classList.add("game-end-popup-visible");
+                        gameWonDiv.classList.add("game-result-visible");
                     };
                 }, 1000);
             }
@@ -121,8 +131,15 @@ levels.forEach(levelBtn => {
     });
 });
 
-gameRestartBtn.addEventListener("click", () => {
-    console.log("Hello");
+gameRestartBtn.forEach((btn) => {
+    btn.addEventListener("click", () => {
+        timer.innerText = "00:00";
+        clearInterval(timerInterval);
+        disabledLevels.forEach(disabledLevel => {
+            disabledLevel.removeAttribute("disabled");
+        });
+        document.querySelector(".selectedlvl").classList.remove("selectedlvl");
+    });
 });
 
 // Canvas Working
@@ -135,7 +152,6 @@ const planet = {
     x: 595,
     y: 225,
     speed: 5,
-    dx: 0,
     dy: 0,
 };
 
@@ -144,34 +160,47 @@ function drawPlanet(){
 }
 
 function newPosition(){
-    planet.x += planet.dx;
     planet.y += planet.dy;
 }
 
+function decideGameLossOrWin() {
+    canvas.style.opacity = 0;
+    console.log("Hello");
+    gameEndPopUp.classList.add("game-end-popup-visible");
+    if (currentSelectedlevelTime > 0) {
+        gameLossDiv.classList.add("game-result-visible");
+        clearInterval(timerInterval);
+    } else {
+        gameWonDiv.classList.add("game-result-visible");
+    }
+}
 function update(){
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawPlanet();
     newPosition();
 
+    animationFrame = requestAnimationFrame(update);
+
     // Detect top and bottom walls and showing game over popup
-    if(planet.y + planet.height > canvas.height){
-        
+    if(planet.y + planet.height > canvas.height + 12){
+        planet.y = canvas.height - 50;
+        planet.dy = canvas.height - 50;
+        decideGameLossOrWin();
     } 
-    else if(planet.y - planet.height < -60){
-        
+    else if(planet.y - planet.height < -64){
+        planet.y = -10;
+        planet.dy = -10;
+        decideGameLossOrWin();
     }
-
-
-    requestAnimationFrame(update)
 }
 
 update();
 
 // Canvas Event Listeners
 document.addEventListener("keydown", (e) => {
-    if(e.key === "ArrowUp"){
+    if(e.key === "ArrowUp" && planet.y != canvas.height - 50 && currentSelectedlevelTime != undefined){
         planet.dy = -planet.speed;
-    } else if(e.key === "ArrowDown"){
+    } else if(e.key === "ArrowDown" && currentSelectedlevelTime != undefined){
         planet.dy = planet.speed;
     }
 });
