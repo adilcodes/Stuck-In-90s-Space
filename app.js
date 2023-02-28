@@ -153,6 +153,15 @@ function update(){
     drawPlanet();
     newPosition();
 
+    // Detect top and bottom walls and showing game over popup
+    if(planet.y + planet.height > canvas.height){
+        
+    } 
+    else if(planet.y - planet.height < -60){
+        
+    }
+
+
     requestAnimationFrame(update)
 }
 
