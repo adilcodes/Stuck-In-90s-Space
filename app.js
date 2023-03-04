@@ -73,8 +73,8 @@ addNameBtn.addEventListener("click", () => {
 
         setTimeout(() => {
             popupCover.classList.add("popup-cover-none");
-            // animatedGameHeadingCover.style.display = "flex";
-            // animatedGameHeadingCover.style.flexDirection = "column";
+            animatedGameHeadingCover.style.display = "flex";
+            animatedGameHeadingCover.style.flexDirection = "column";
             animatedGameHeadingCover.children[0].classList.add("animated-game-name-heading");
             animatedGameHeadingCover.children[1].classList.add("animated-game-guideline");
         }, 500);
@@ -209,13 +209,17 @@ function update() {
     if (planet.y + planet.height > canvas.height + 12) {
         planet.y = canvas.height - 50;
         planet.dy = canvas.height - 50;
-        gameLossAudio.play();
+        if(!gameWonDiv.classList.contains("game-result-visible")){
+            gameLossAudio.play();
+        }
         decideGameLossOrWin();
     }
     else if (planet.y - planet.height < -64) {
         planet.y = -10;
         planet.dy = -10;
-        gameLossAudio.play();
+        if(!gameWonDiv.classList.contains("game-result-visible")){
+            gameLossAudio.play();
+        }
         decideGameLossOrWin();
     }
 }
