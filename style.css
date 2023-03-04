@@ -257,7 +257,8 @@ body{
     font-size: 24px;
     margin-bottom: 25px;
 }
-.game-end-popup div .gameRestartBtn{
+.game-end-popup div .gameRestartBtn,
+.game-end-popup div .goToStartBtn{
     padding: 7px 28px;
     font-size: 20px;
     border-radius: 0;

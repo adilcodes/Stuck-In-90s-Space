@@ -1,6 +1,7 @@
 // Making audios
 let btnClickAudio = new Audio('./audios/btnClickAudio.mp3'),
-    bgAudio = new Audio('./audios/bgAudio.mp3');
+    bgAudio = new Audio('./audios/bgAudio.mp3'),
+    gameLossAudio = new Audio('./audios/gameLossAudio.mp3');
 
 // Targeting DOM Elements
 let playBtn = document.querySelector("#playBtn"),
@@ -15,7 +16,8 @@ let playBtn = document.querySelector("#playBtn"),
     levels = document.querySelectorAll(".levels button"),
     timer = document.querySelector("#timer-countdown"),
     startCountdown = document.querySelector(".start-countdown p"),
-    gameRestartBtn = document.querySelectorAll(".gameRestartBtn"),
+    gameRestartBtn = document.querySelector(".gameRestartBtn"),
+    goToStartBtn = document.querySelector(".goToStartBtn")
     canvas = document.querySelector("canvas"),
     gameEndPopUp = document.querySelector(".game-end-popup"),
     gameLossDiv = document.querySelector(".game-loss"),
@@ -26,8 +28,10 @@ let disabledLevels,
     timerInterval,
     animationFrame,
     currentSelectedlevel,
+    startCountdownextreme,
     currentSelectedlevelTime,
     ctx = canvas.getContext("2d");
+    
 canvas.width = canvas.offsetWidth;
 canvas.height = canvas.offsetHeight;
 
@@ -99,21 +103,22 @@ levels.forEach(levelBtn => {
         };
 
         startCountdown.parentElement.style.display = "flex";
-        let startCountdownextreme = 3;
+        startCountdownextreme = 3;
         startCountdown.innerText = startCountdownextreme;
         let countdownInterval = setInterval(() => {
-            if (startCountdownextreme > 0) {
+            if (startCountdownextreme >= 1) {
                 startCountdownextreme--;
                 startCountdown.innerText = startCountdownextreme;
             } else {
                 startCountdown.parentElement.style.display = "none";
                 canvas.style.opacity = 1;
+                planet.dy = planet.speed;
                 clearInterval(countdownInterval);
                 timerInterval = setInterval(() => {
                     currentSelectedlevelTime--;
                     if (currentSelectedlevelTime >= 10) {
                         timer.innerText = "00:" + currentSelectedlevelTime;
-                    } else if (currentSelectedlevelTime < 10 &&  currentSelectedlevelTime >= 0) {
+                    } else if (currentSelectedlevelTime < 10 && currentSelectedlevelTime >= 0) {
                         timer.innerText = "00:0" + currentSelectedlevelTime;
                     } else {
                         clearInterval(timerInterval);
@@ -122,26 +127,45 @@ levels.forEach(levelBtn => {
                         });
                         document.querySelector(".selectedlvl").classList.remove("selectedlvl");
                         gameEndPopUp.classList.add("game-end-popup-visible");
+                        gameLossDiv.classList.contains("game-result-visible") ? gameLossDiv.classList.remove("game-result-visible") : "";
                         gameWonDiv.classList.add("game-result-visible");
                     };
                 }, 1000);
             }
         }, 1000);
-
+        planet.y = 255;
+        planet.dy = 0;
+        update();
     });
 });
 
-gameRestartBtn.forEach((btn) => {
-    btn.addEventListener("click", () => {
-        timer.innerText = "00:00";
-        clearInterval(timerInterval);
-        disabledLevels.forEach(disabledLevel => {
-            disabledLevel.removeAttribute("disabled");
-        });
-        document.querySelector(".selectedlvl").classList.remove("selectedlvl");
+gameRestartBtn.addEventListener("click", () => {
+    btnClickAudio.currentTime = 0;
+    btnClickAudio.play();
+    timer.innerText = "00:00";
+    clearInterval(timerInterval);
+    disabledLevels.forEach(disabledLevel => {
+        disabledLevel.removeAttribute("disabled");
     });
+    document.querySelector(".selectedlvl").classList.remove("selectedlvl");
+    gameEndPopUp.classList.remove("game-end-popup-visible");
+    gameWonDiv.classList.remove("game-result-visible");
+    animatedGameHeadingCover.style.display = "flex";
+    animatedGameHeadingCover.style.flexDirection = "column";
+    animatedGameHeadingCover.children[0].classList.add("animated-game-name-heading");
+    animatedGameHeadingCover.children[1].classList.add("animated-game-guideline");
 });
 
+goToStartBtn.addEventListener("click", () => {
+    btnClickAudio.currentTime = 0;
+    btnClickAudio.play();
+    gameEndPopUp.classList.remove("game-end-popup-visible");
+    gameWonDiv.classList.remove("game-result-visible");
+    animatedGameHeadingCover.style.display = "flex";
+    animatedGameHeadingCover.style.flexDirection = "column";
+    animatedGameHeadingCover.children[0].classList.add("animated-game-name-heading");
+    animatedGameHeadingCover.children[1].classList.add("animated-game-guideline");
+});
 // Canvas Working
 // Adding Planet image to canvas
 const planetImage = document.querySelector("#planetImage")
@@ -155,17 +179,17 @@ const planet = {
     dy: 0,
 };
 
-function drawPlanet(){
+function drawPlanet() {
     ctx.drawImage(planetImage, planet.x, planet.y, planet.width, planet.height);
 }
 
-function newPosition(){
+function newPosition() {
     planet.y += planet.dy;
 }
 
 function decideGameLossOrWin() {
     canvas.style.opacity = 0;
-    console.log("Hello");
+    cancelAnimationFrame(animationFrame);
     gameEndPopUp.classList.add("game-end-popup-visible");
     if (currentSelectedlevelTime > 0) {
         gameLossDiv.classList.add("game-result-visible");
@@ -174,7 +198,7 @@ function decideGameLossOrWin() {
         gameWonDiv.classList.add("game-result-visible");
     }
 }
-function update(){
+function update() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawPlanet();
     newPosition();
@@ -182,25 +206,25 @@ function update(){
     animationFrame = requestAnimationFrame(update);
 
     // Detect top and bottom walls and showing game over popup
-    if(planet.y + planet.height > canvas.height + 12){
+    if (planet.y + planet.height > canvas.height + 12) {
         planet.y = canvas.height - 50;
         planet.dy = canvas.height - 50;
+        gameLossAudio.play();
         decideGameLossOrWin();
-    } 
-    else if(planet.y - planet.height < -64){
+    }
+    else if (planet.y - planet.height < -64) {
         planet.y = -10;
         planet.dy = -10;
+        gameLossAudio.play();
         decideGameLossOrWin();
     }
 }
 
-update();
-
 // Canvas Event Listeners
 document.addEventListener("keydown", (e) => {
-    if(e.key === "ArrowUp" && planet.y != canvas.height - 50 && currentSelectedlevelTime != undefined){
+    if (e.key === "ArrowUp" && planet.y != canvas.height - 50 && currentSelectedlevelTime != undefined && startCountdownextreme === 0) {
         planet.dy = -planet.speed;
-    } else if(e.key === "ArrowDown" && currentSelectedlevelTime != undefined){
+    } else if (e.key === "ArrowDown" && currentSelectedlevelTime != undefined && startCountdownextreme === 0) {
         planet.dy = planet.speed;
     }
 });
